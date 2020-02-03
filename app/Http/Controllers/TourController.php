@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUpdateTourRequest;
+use App\Models\Tour;
 use Illuminate\Http\Request;
 
 class TourController extends Controller
@@ -14,7 +16,7 @@ class TourController extends Controller
         $this->request = $request;
         //$this->middleware('auth');
         //$this->middleware('auth')->only(['create', 'store']);
-        $this->middleware('auth')->except(['index', 'show']);
+       // $this->middleware('auth')->except(['index', 'show', 'create']);
     }   
     /**
      * Display a listing of the resource.
@@ -23,7 +25,12 @@ class TourController extends Controller
      */
     public function index()
     {
-        return "Listagem dos tours";
+       
+        // $tours = Tour::All(); 
+        $tours=Tour::Paginate(10);
+        return view('admin.pages.tours.index', [
+            "tours" => $tours 
+        ]);
     }
 
     /**
@@ -33,18 +40,35 @@ class TourController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.pages.tours.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param   App\Http\Requests\StoreUpdateTourRequest;  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUpdateTourRequest $request)
     {
-        //
+
+        dd('OK');
+
+        /*
+        $request->validate([
+            'name' => 'required|min:3|max:255',
+            'description' => 'required|min:10|max:10000',
+            'photo' => 'required|image'
+        ]);*/
+
+
+        if($request->photo->isValid()){
+            //$request->file('photo')->store('products/teste')
+           //dd($request->photo->store('tours'));
+           $nameFile = $request->name . '.' . $request->photo->extension(); 
+
+           dd($request->photo->storeAs('tours', $nameFile));
+        }
     }
 
     /**
@@ -66,7 +90,7 @@ class TourController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('admin.pages.tours.edit', compact('id'));
     }
 
     /**
@@ -78,7 +102,7 @@ class TourController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd("Editando o $id do produto ");
     }
 
     /**

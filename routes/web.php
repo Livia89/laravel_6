@@ -24,13 +24,17 @@ Route::get('/login', function(){
 Route::post('/tours', 'TourController@store')->name('tours.store');
 Route::get('/tours/create', 'TourController@create')->name('tours.create');
 Route::get('/tours/{id}', 'TourController@show')->name('tours.show');
-Route::get('/tours/{id}/edit/', 'TourController@show')->name('tours.edit');
+Route::get('/tours/{id}/edit/', 'TourController@edit')->name('tours.edit');
 Route::put('/tours/{id}', 'TourController@update')->name('tours.update');
 Route::delete('/tours/{id}', 'TourController@destroy')->name('tours.destroy');
 */
 
 
-/*Route::middleware([])->group(function(){
+/*
+
+Passa por esta rota sempre que tentar aceder as paginas que estão dentro dela e só acede se estiver autenticado
+
+Route::middleware([])->group(function(){
     /* Prefixo da rota url - admin/ -> prefixo */ 
    /* Route::prefix('admin')->group(function(){
         
